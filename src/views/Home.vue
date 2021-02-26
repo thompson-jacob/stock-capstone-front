@@ -1,18 +1,23 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
-  </div>
+  <trading-vue :data="this.$data"></trading-vue>
 </template>
-
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
+import TradingVue from "trading-vue-js";
 
 export default {
-  name: "Home",
-  components: {
-    HelloWorld,
+  name: "app",
+
+  components: { TradingVue },
+  data() {
+    return {
+      ohlcv: [
+        [1551128400000, 33, 38.1, 14, 14, 196],
+        [1551132000000, 13.7, 30, 0.6, 30, 206],
+        [1551135600000, 29.9, 50, 21.3, 21.8, 74],
+        [1551139200000, 21.7, 25.9, 18, 24, 140],
+        [1551142800000, 24.1, 24.1, 24, 24.1, 29],
+      ],
+    };
   },
 };
 </script>
