@@ -18,23 +18,21 @@ export default {
     };
   },
   created: function() {
-    this.showStocks();
-    // this.apiStocks();
+    // this.showStock();
+    this.apiStocks();
   },
   methods: {
-    showStocks: function() {
+    showStock: function() {
       axios.get("/api/stocks/").then(response => {
         this.stock = response.data;
         console.log("Realtime stock", this.stock);
       });
     },
     apiStocks: function() {
-      axios
-        // .get("https://financialmodelingprep.com/api/v3/quote-short/AAPL?apikey=")
-        .then(response => {
-          this.stock = response.data;
-          console.log("Realtime stock", this.apiStocks);
-        });
+        axios.get("/api/stocks/1").then(response => {
+        this.stock = response.data;
+        console.log("Realtime stock", this.apiStocks);
+      });
     },
   },
 };
