@@ -23,7 +23,7 @@ export default {
   },
   methods: {
     showStocks: function() {
-      axios.get("/api/stocks/1").then(response => {
+      axios.get("/api/stocks/").then(response => {
         this.stock = response.data;
         console.log("Realtime stock", this.stock);
       });
