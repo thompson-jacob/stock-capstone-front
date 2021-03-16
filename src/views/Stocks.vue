@@ -1,7 +1,10 @@
 <template>
   <div class="#stocks">
+    <p>type to search a stock for its data</p>
+    <input type="text" v-model="ticker" />
+    <button v-on:click="this.apiStocks">view stock</button>
     <h1>{{ stock }}</h1>
-    <p>this is test data</p>
+    <button v-on:click="this.addToFavorites">Favorite stock</button>
   </div>
 </template>
 
@@ -15,24 +18,48 @@ export default {
     return {
       stock: "",
       apiStock: "",
+      ticker: "",
+      price: this.stock.price,
     };
   },
   created: function() {
     // this.showStock();
-    this.apiStocks();
+    //this.apiStocks();
   },
   methods: {
-    showStock: function() {
-      axios.get("/api/stocks/").then(response => {
-        this.stock = response.data;
-        console.log("Realtime stock", this.stock);
-      });
-    },
     apiStocks: function() {
-        axios.get("/api/stocks/1").then(response => {
+      axios.get("/api/stock_search?ticker=" + this.ticker).then(response => {
         this.stock = response.data;
+
+        console.log(response.data);
+
+        // console.log(new Date());
+
         console.log("Realtime stock", this.apiStocks);
       });
+    },
+    addToFavorites: function() {
+      var params = {
+        stock_id: this.id,
+        ticker: this.ticker,
+        current_price: this.price,
+      };
+      axios
+        .post("/api/stocks", params)
+        .then(response => {
+          console.log(response.data);
+        })
+        .catch(error => {
+          this.errors = error.response.data.errors;
+        });
+      axios
+        .post("/api/userstocks", params)
+        .then(response => {
+          console.log(response.data);
+        })
+        .catch(error => {
+          this.errors = error.response.data.errors;
+        });
     },
   },
 };
