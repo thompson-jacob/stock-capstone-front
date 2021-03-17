@@ -4,7 +4,8 @@
     <input type="text" v-model="ticker" />
     <button v-on:click="this.apiStocks">view stock</button>
     <h1>{{ stock }}</h1>
-    <button v-on:click="this.addToFavorites">Favorite stock</button>
+    <input @change="toggleFavorite()" type="checkbox" id="checkbox" v-model="stock.favorited" />
+    <label for="checkbox">Favorited</label>
     <aside class="news">
       <h2>Stock News</h2>
       <button v-on:click="this.movementStocks">News</button>
@@ -55,20 +56,52 @@ export default {
         console.log("Realtime stock", this.apiStocks);
       });
     },
+    toggleFavorite: function() {
+      console.log(this.stock.favorited);
+      if (this.stock.favorited) {
+        console.log("Add Favorite");
+        var params = {
+          ticker: this.ticker,
+          current_price: this.price,
+        };
+        axios
+          .post("/api/userstocks", params)
+          .then(response => {
+            console.log(response.data);
+          })
+          .catch(error => {
+            this.errors = error.response.data.errors;
+          });
+      } else {
+        console.log("Delete Favorite");
+        // delete favorite here
+        params = {
+          stock_id: this.stock.id,
+        };
+        axios
+          .delete("/api/userstocks", { data: params })
+          .then(response => {
+            console.log(response.data);
+          })
+          .catch(error => {
+            this.errors = error.response.data.errors;
+          });
+      }
+    },
+
     addToFavorites: function() {
       var params = {
-        stock_id: this.id,
         ticker: this.ticker,
         current_price: this.price,
       };
-      axios
-        .post("/api/stocks", params)
-        .then(response => {
-          console.log(response.data);
-        })
-        .catch(error => {
-          this.errors = error.response.data.errors;
-        });
+      // axios
+      //   .post("/api/stocks", params)
+      //   .then(response => {
+      //     console.log(response.data);
+      //   })
+      //   .catch(error => {
+      //     this.errors = error.response.data.errors;
+      //   });
       axios
         .post("/api/userstocks", params)
         .then(response => {
