@@ -23,7 +23,9 @@ export default {
   components: { TradingVue },
   data() {
     return {
-      ohclv,
+      ohclv: [
+        []
+      ]
     };
   },
 };

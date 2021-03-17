@@ -5,6 +5,22 @@
     <button v-on:click="this.apiStocks">view stock</button>
     <h1>{{ stock }}</h1>
     <button v-on:click="this.addToFavorites">Favorite stock</button>
+    <aside class="news">
+      <h2>Stock News</h2>
+      <button v-on:click="this.movementStocks">News</button>
+      <section class="news-div">
+        <div v-for="story in storys" v-bind:key="story.ticker">
+          <img v-bind:src="`${story.image}`" />
+          <p>News For {{ story.symbol }}</p>
+          <p>Published by {{ story.site }}</p>
+          <p>{{ story.publishedDate }}</p>
+          <p>{{ story.title }}</p>
+          <p>{{ story.text }}</p>
+
+          <a :href="`${story.url}`">Full Story Here</a>
+        </div>
+      </section>
+    </aside>
   </div>
 </template>
 
@@ -19,12 +35,13 @@ export default {
       stock: "",
       apiStock: "",
       ticker: "",
-      price: this.stock.price,
+      storys: [],
     };
   },
   created: function() {
     // this.showStock();
     //this.apiStocks();
+    // this.movementStocks();
   },
   methods: {
     apiStocks: function() {
@@ -60,6 +77,12 @@ export default {
         .catch(error => {
           this.errors = error.response.data.errors;
         });
+    },
+    movementStocks: function() {
+      axios.get("api/movement_stocks?ticker=" + this.ticker).then(response => {
+        this.storys = response.data;
+        console.log(response.data);
+      });
     },
   },
 };
