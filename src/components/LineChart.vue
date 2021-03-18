@@ -1,65 +1,31 @@
+<template>
+  <div>
+    <apexchart width="500" type="line" :options="options" :series="series"></apexchart>
+  </div>
+</template>
+
 <script>
-import { Line } from "vue-chartjs";
+import VueApexCharts from "vue-apexcharts";
+import Vue from "vue";
+Vue.component("apexchart", VueApexCharts);
 export default {
-  extends: Line,
-  props: {
-    chartData: {
-      type: Array,
-      required: false,
-    },
-    chartLabels: {
-      type: Array,
-      required: true,
-    },
-  },
-  data() {
+  data: function() {
     return {
       options: {
-        scales: {
-          yAxes: [
-            {
-              ticks: {
-                beginAtZero: false,
-              },
-              gridLines: {
-                display: true,
-              },
-            },
-          ],
-          xAxes: [
-            {
-              gridLines: {
-                display: false,
-              },
-            },
-          ],
+        chart: {
+          id: "vuechart-example",
         },
-        legend: {
-          display: false,
+        xaxis: {
+          categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998],
         },
-        responsive: true,
-        maintainAspectRatio: false,
       },
+      series: [
+        {
+          name: "series-1",
+          data: [30, 40, 45, 50, 49, 60, 70, 91],
+        },
+      ],
     };
-  },
-  mounted() {
-    this.renderChart(
-      {
-        labels: this.chartLabels,
-        datasets: [
-          {
-            label: "prices",
-            borderColor: "#249EBF",
-            pointBackgroundColor: "white",
-            borderWidth: 1,
-            pointBorderColor: "#249EBF",
-            backgroundColor: "transparent",
-            data: this.chartData,
-          },
-        ],
-      },
-      this.options
-    );
   },
 };
 </script>

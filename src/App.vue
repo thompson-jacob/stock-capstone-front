@@ -12,6 +12,8 @@
       <router-link to="/login">Login</router-link>
       |
       <router-link to="/logout">Logout</router-link>
+      |
+      <router-link to="/linechart">LineChart</router-link>
     </div>
     <router-view />
   </div>

@@ -1,23 +1,19 @@
 <template>
-  <trading-vue :data="this.$data"></trading-vue>
+  <p>hi</p>
 </template>
+
 <script>
-import TradingVue from "trading-vue-js";
+// import VueApexCharts from "vue-apexcharts";
 
-export default {
-  name: "app",
+// export default {
+//   name: "app",
 
-  components: { TradingVue },
-  data() {
-    return {
-      ohlcv: [
-        [1551128400000, 33, 38.1, 14, 14, 196],
-        [1551132000000, 13.7, 30, 0.6, 30, 206],
-        [1551135600000, 29.9, 50, 21.3, 21.8, 74],
-        [1551139200000, 21.7, 25.9, 18, 24, 140],
-        [1551142800000, 24.1, 24.1, 24, 24.1, 29],
-      ],
-    };
-  },
-};
+//   components: { LineChart },
+//   data() {
+//     return {
+
+//     };
+//   },
+// };
+//
 </script>

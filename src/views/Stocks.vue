@@ -8,7 +8,7 @@
     <label for="checkbox">Favorited</label>
     <aside class="news">
       <h2>Stock News</h2>
-      <button v-on:click="this.movementStocks">News</button>
+      <button v-on:click="this.stock_news">News</button>
       <section class="news-div">
         <div v-for="story in storys" v-bind:key="story.ticker">
           <img v-bind:src="`${story.image}`" />
@@ -22,6 +22,13 @@
         </div>
       </section>
     </aside>
+    <button v-on:click="this.stock_chart">Charts</button>
+    <!-- <div v-="timeintervals5 in timeintervals5s" v-bind:key="timeintervals5.date">
+    <p>{{ timeintervals5[0] }}</p>
+    </div> -->
+    <div v-if="options && series">
+      <apexchart width="500" type="line" :options="options" :series="series"></apexchart>
+    </div>
   </div>
 </template>
 
@@ -29,7 +36,9 @@
 
 <script>
 import axios from "axios";
-
+import VueApexCharts from "vue-apexcharts";
+import Vue from "vue";
+Vue.component("apexchart", VueApexCharts);
 export default {
   data: function() {
     return {
@@ -37,12 +46,15 @@ export default {
       apiStock: "",
       ticker: "",
       storys: [],
+      timeintervals5: [],
+      options: null,
+      series: null,
     };
   },
   created: function() {
     // this.showStock();
     //this.apiStocks();
-    // this.movementStocks();
+    // this.stock_news();
   },
   methods: {
     apiStocks: function() {
@@ -54,6 +66,7 @@ export default {
         // console.log(new Date());
 
         console.log("Realtime stock", this.apiStocks);
+        this.stock_chart();
       });
     },
     toggleFavorite: function() {
@@ -111,10 +124,33 @@ export default {
           this.errors = error.response.data.errors;
         });
     },
-    movementStocks: function() {
-      axios.get("api/movement_stocks?ticker=" + this.ticker).then(response => {
+    stock_news: function() {
+      axios.get("api/stock_news?ticker=" + this.ticker).then(response => {
         this.storys = response.data;
         console.log(response.data);
+      });
+    },
+    stock_chart: function() {
+      axios.get("api/stock_chart?ticker=" + this.ticker).then(response => {
+        var data = response.data;
+        this.options = {
+          chart: {
+            id: "vuechart-example",
+          },
+          xaxis: {
+            categories: data.map(x => x.date),
+          },
+        };
+        this.series = [
+          {
+            name: "open",
+            data: data.map(y => y.open),
+          },
+          {
+            name: "close",
+            data: data.map(y => y.close),
+          },
+        ];
       });
     },
   },

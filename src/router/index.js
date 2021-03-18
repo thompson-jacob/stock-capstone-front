@@ -28,6 +28,8 @@ const routes = [
   },
   { path: "/signup", name: "signup", component: Signup },
   { path: "/login", name: "login", component: Login },
+  // { path: "/linechart", name: "linechart", component: Login },
+
 ];
 
 const router = new VueRouter({
