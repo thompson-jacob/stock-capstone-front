@@ -43,6 +43,7 @@ export default {
     // this.showStock();
     //this.apiStocks();
     // this.movementStocks();
+    this.chartStocks();
   },
   methods: {
     apiStocks: function() {
@@ -50,9 +51,7 @@ export default {
         this.stock = response.data;
 
         console.log(response.data);
-
-        // console.log(new Date());
-
+        
         console.log("Realtime stock", this.apiStocks);
       });
     },
@@ -112,7 +111,7 @@ export default {
         });
     },
     movementStocks: function() {
-      axios.get("api/movement_stocks?ticker=" + this.ticker).then(response => {
+      axios.get("api/stock_news?ticker=" + this.ticker).then(response => {
         this.storys = response.data;
         console.log(response.data);
       });

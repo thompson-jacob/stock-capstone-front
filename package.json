@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
+    "bootstrap": "^4.6.0",
     "chart.js": "^2.9.4",
     "chartkick": "^3.2.1",
     "core-js": "^3.6.5",

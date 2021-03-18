@@ -1,11 +1,11 @@
 <script>
-import { Line } from "vue-chartjs";
+import { Candle } from "vue-chartjs";
 export default {
-  extends: Line,
+  extends: Candle,
   props: {
     chartData: {
       type: Array,
-      required: true,
+      required: false,
     },
     chartLabels: {
       type: Array,
