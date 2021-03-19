@@ -133,6 +133,7 @@ export default {
     stock_chart: function() {
       axios.get("api/stock_chart?ticker=" + this.ticker).then(response => {
         var data = response.data;
+        console.log(data);
         this.options = {
           chart: {
             id: "vuechart-example",
@@ -141,6 +142,8 @@ export default {
             categories: data.map(x => x.date),
           },
         };
+        console.log(this.options.xaxis.categories);
+        this.options.xaxis.categories.filter(current => current.select)
         this.series = [
           {
             name: "open",
