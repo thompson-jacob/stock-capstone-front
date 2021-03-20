@@ -23,11 +23,12 @@
       </section>
     </aside>
     <button v-on:click="this.stock_chart">Charts</button>
-    <!-- <div v-="timeintervals5 in timeintervals5s" v-bind:key="timeintervals5.date">
-    <p>{{ timeintervals5[0] }}</p>
-    </div> -->
+
     <div v-if="options && series">
       <apexchart width="500" type="line" :options="options" :series="series"></apexchart>
+    </div>
+    <div v-if="candleOptions && candleSeries" id="chart">
+      <apexchart type="candlestick" height="350" :options="candleOptions" :series="candleSeries"></apexchart>
     </div>
   </div>
 </template>
@@ -46,9 +47,12 @@ export default {
       apiStock: "",
       ticker: "",
       storys: [],
-      timeintervals5: [],
+      //linechart
       options: null,
       series: null,
+      //candlechart
+      candleOptions: this.candleOptions,
+      candleSeries: this.candleSeries,
     };
   },
   created: function() {
@@ -134,24 +138,78 @@ export default {
       axios.get("api/stock_chart?ticker=" + this.ticker).then(response => {
         var data = response.data;
         console.log(data);
-        this.options = {
+        // this.options = {
+        //   chart: {
+        //     id: "vuechart-example",
+        //   },
+        //   xaxis: {
+        //     categories: data.map(x => x.date),
+        //   },
+        // };
+        // // console.log(this.options.xaxis.categories);
+        // // this.options.xaxis.categories.filter(current => current.select);
+        // this.series = [
+        //   {
+        //     name: "open",
+        //     data: data.map(y => y.open),
+        //   },
+        //   // {
+        //   //   name: "high",
+        //   //   data: data.map(y => y.high),
+        //   // },
+        //   // {
+        //   //   name: "low",
+        //   //   data: data.map(y => y.low),
+        //   // },
+        //   // {
+        //   //   name: "close",
+        //   //   data: data.map(y => y.close),
+        //   // },
+        // ];
+        this.chartOptions = {
           chart: {
-            id: "vuechart-example",
+            type: "candlestick",
+            height: 350,
+          },
+          title: {
+            text: "CandleStick Chart",
+            align: "left",
           },
           xaxis: {
-            categories: data.map(x => x.date),
+            type: "datetime",
+          },
+          yaxis: {
+            tooldip: {
+              enabled: true,
+            },
           },
         };
-        console.log(this.options.xaxis.categories);
-        this.options.xaxis.categories.filter(current => current.select)
-        this.series = [
+        this.candleSeries = [
           {
-            name: "open",
-            data: data.map(y => y.open),
-          },
-          {
-            name: "close",
-            data: data.map(y => y.close),
+            // data: [
+            //   {
+            //     // x: new Date(1538778600000),
+            //     // y: [6629.81, 6650.5, 6623.04, 6633.33],
+            //     x: data.map(x => new Date(x.date).getTime()),
+            //     y: data.map(y => [y.open, y.high, y.low, y.close]),
+            //     // y: data.map(y => {
+            //     //   [y.open, y.high, y.low, y.close];
+            //     //   console.log(y.open, y.high, y.low, y.close);
+            //     // }),
+            //   },
+            // ],
+            data: [
+              {
+                x: new Date(1538778600000),
+                y: [6629.81, 6650.5, 6623.04, 6633.33],
+                // x: data.map(x => new Date(x.date).getTime()),
+                // y: data.map(y => [y.open, y.high, y.low, y.close]),
+                // y: data.map(y => {
+                //   [y.open, y.high, y.low, y.close];
+                //   console.log(y.open, y.high, y.low, y.close);
+                // }),
+              },
+            ],
           },
         ];
       });
