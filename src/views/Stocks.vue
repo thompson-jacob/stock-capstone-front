@@ -2,13 +2,18 @@
   <div class="#stocks">
     <div>
       <p>type to search a stock for its data</p>
-      <input type="search" v-model="ticker" placeholder="exact ticker" />
-      <button v-on:click="this.apiStocks">search</button>
+      <!-- <input type="search" v-model="ticker" placeholder="exact ticker" />
+      <button v-on:click="this.apiStocks">search</button>  -->
     </div>
-
+    <div class="overflow-auto p-3 mb-3 mb-md-0 mr-md-3 bg-dark, favorites">
+      <h4>Watchlist</h4>
+      <div v-for="favorite in favorites" v-bind:key="favorite.id">
+        <p v-on:click="apiStocks((ticker = favorite.stock.ticker))">{{ favorite.stock.ticker }}</p>
+      </div>
+    </div>
     <div>
       <input type="search real" v-model="searchbar" placeholder="search " />
-
+      <!-- TODO refresh watchlist on change -->
       <div v-for="search in searches" v-bind:key="search.symbol" v-on:click="apiStocks((ticker = search.symbol))">
         <p class="search-return">
           <span>{{ search.name }}</span>
@@ -21,7 +26,7 @@
     <input @change="toggleFavorite()" type="checkbox" id="checkbox" v-model="stock.favorited" />
     <label for="checkbox">Favorited</label>
     <aside class="overflow-auto p-3 mb-3 mb-md-0 mr-md-3 bg-dark" style="max-width: 300px; max-height: 200px;">
-      <h2>Stock News</h2>
+      <h4>Stock News</h4>
       <button v-on:click="this.stock_news">News</button>
       <section class="news-div">
         <div v-for="story in storys" v-bind:key="story.ticker">
@@ -40,9 +45,9 @@
     <div v-if="options && series">
       <apexchart width="500" type="line" :options="options" :series="series"></apexchart>
     </div>
-    <!-- <div v-if="options && series">
-      <apexchart type="candlestick" height="350" :options="options" :series="series"></apexchart>
-    </div> -->
+    <div v-if="options2 && series2">
+      <apexchart type="candlestick" height="350" :options="options2" :series="series2"></apexchart>
+    </div>
   </div>
 </template>
 
@@ -54,6 +59,13 @@
 .news-div img {
   width: 100%;
   height: auto;
+  color: rgb(81, 233, 43);
+}
+.favorites {
+  width: 200px;
+  position: relative;
+}
+h4 {
   color: rgb(81, 233, 43);
 }
 </style>
@@ -75,30 +87,43 @@ export default {
       series: null,
       searches: [],
       searchbar: "",
+      favorites: [],
       //candlechart
-      // candleOptions: null,
-      // candleSeries: null,
+      options2: null,
+      series2: null,
+      chart_time: "5min",
     };
   },
   created: function() {
     // this.showStock();
     //this.apiStocks();
     // this.stock_news();
+    this.userFavorites();
   },
   methods: {
+    // change passed in?
+    userFavorites: function() {
+      axios.get("/api/userstocks").then(response => {
+        this.favorites = response.data;
+        console.log(this.favorites);
+      });
+    },
     apiStocks: function(ticker) {
       axios.get("/api/stock_search?ticker=" + ticker).then(response => {
         this.stock = response.data;
 
         console.log(response.data);
         console.log("Realtime stock", this.apiStocks);
-        this.stock_chart(ticker);
+        this.searches = [];
+        // var chart = this.chart_time;
+        this.stock_chart();
       });
     },
     searchBar: function() {
       axios.get("/api/search_bar?searchbar=" + this.searchbar).then(response => {
         this.searches = response.data;
         console.log(this.searches);
+        this.searchbar = "";
       });
     },
     toggleFavorite: function() {
@@ -107,7 +132,6 @@ export default {
         console.log("Add Favorite");
         var params = {
           ticker: this.ticker,
-          current_price: this.price,
         };
         axios
           .post("/api/userstocks", params)
@@ -133,7 +157,6 @@ export default {
           });
       }
     },
-
     addToFavorites: function() {
       var params = {
         ticker: this.ticker,
@@ -155,10 +178,11 @@ export default {
       });
     },
     stock_chart: function() {
-      axios.get("api/stock_chart?ticker=" + this.ticker).then(response => {
+      axios.get("api/stock_chart?chart_time=" + this.chart_time + "&ticker=" + this.ticker).then(response => {
         var data = response.data;
 
-        console.log(data);
+        data = data.reverse();
+
         this.options = {
           chart: {
             id: "vuechart-example",
@@ -168,69 +192,39 @@ export default {
           },
         };
         // console.log(this.options.xaxis.categories);
-        // this.options.xaxis.categories.filter(current => current.select);
+        // this.options.xaxis.categories.filter(current => current.filter);
+
         this.series = [
           {
             name: "open",
             data: data.map(y => y.open),
           },
-          {
-            name: "high",
-            data: data.map(y => y.high),
-          },
-          {
-            name: "low",
-            data: data.map(y => y.low),
-          },
-          {
-            name: "close",
-            data: data.map(y => y.close),
-          },
           // {
-          //   name: "ema",
-          //   data: data.map(y => y.ema),
+          //   name: "high",
+          //   data: data.map(y => y.high),
+          // },
+          // {
+          //   name: "low",
+          //   data: data.map(y => y.low),
+          // },
+          // {
+          //   name: "close",
+          //   data: data.map(y => y.close),
           // },
         ];
-        // this.options = {
-        //   chart: {
-        //     type: "candlestick",
-        //     height: 350,
-        //   },
-        //   title: {
-        //     text: "CandleStick Chart",
-        //     align: "left",
-        //   },
-        //   xaxis: {
-        //     type: "datetime",
-        //   },
-        //   yaxis: {
-        //     tooldip: {
-        //       enabled: true,
-        //     },
-        //   },
-        // };
-        // this.series = [
-        //   {
-        //     data: [
-        //       {
-        //         x: data.map(x => new Date(x.date).getTime()),
-        //         y: data.map(y => [y.open, y.high, y.low, y.close]),
-        //       },
-        //       // {
-        //       //         x: new Date(1538778600000),
-        //       //         y: [6629.81, 6650.5, 6623.04, 6633.33],
-        //       //       },
-        //       //       {
-        //       //         x: new Date(1538780400000),
-        //       //         y: [6632.01, 6643.59, 6620, 6630.11],
-        //       //       },
-        //       //       {
-        //       //         x: new Date(1538782200000),
-        //       //         y: [6630.71, 6648.95, 6623.34, 6635.65],
-        //       //       },
-        //     ],
-        //   },
-        // ];
+        this.options2 = {
+          chart: {
+            id: "candlestick-example",
+            type: "candle",
+          },
+        };
+        this.series2 = [
+          {
+            data: data
+              .slice(Math.max(data.length - 5, 0))
+              .map(item => ({ x: item.date, y: [item.open, item.high, item.low, item.close] })),
+          },
+        ];
       });
     },
   },
