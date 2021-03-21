@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div id="nav">
+    <div id="nav" class="navbar navbar-dark bg-dark font-light">
       <router-link to="/">Home</router-link>
       |
       <router-link to="/about">About</router-link>
@@ -25,19 +25,25 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #3a86d3;
+  font-family: "Orbitron", sans-serif;
+  letter-spacing: 0.5px;  
 }
 
 #nav {
   padding: 30px;
+  color: #f0f4f8;
 }
 
 #nav a {
   font-weight: bold;
-  color: #2c3e50;
+  color: #0dec88;
 }
 
 #nav a.router-link-exact-active {
-  color: #42b983;
+  color: #0dec88;
+}
+#orbitron {
+  font-family: "Orbitron", sans-serif;
 }
 </style>
