@@ -1,12 +1,26 @@
 <template>
   <div class="#stocks">
-    <p>type to search a stock for its data</p>
-    <input type="text" v-model="ticker" />
-    <button v-on:click="this.apiStocks">view stock</button>
+    <div>
+      <p>type to search a stock for its data</p>
+      <input type="search" v-model="ticker" placeholder="exact ticker" />
+      <button v-on:click="this.apiStocks">search</button>
+    </div>
+
+    <div>
+      <input type="search real" v-model="searchbar" placeholder="search " />
+
+      <div v-for="search in searches" v-bind:key="search.symbol" v-on:click="apiStocks((ticker = search.symbol))">
+        <p class="search-return">
+          <span>{{ search.name }}</span>
+          <span class="stock-ticker-symbol">{{ search.symbol }}</span>
+        </p>
+      </div>
+    </div>
+    <button v-on:click="this.searchBar">search</button>
     <h1>{{ stock }}</h1>
     <input @change="toggleFavorite()" type="checkbox" id="checkbox" v-model="stock.favorited" />
     <label for="checkbox">Favorited</label>
-    <aside class="news">
+    <aside class="overflow-auto p-3 mb-3 mb-md-0 mr-md-3 bg-dark" style="max-width: 300px; max-height: 200px;">
       <h2>Stock News</h2>
       <button v-on:click="this.stock_news">News</button>
       <section class="news-div">
@@ -32,7 +46,17 @@
   </div>
 </template>
 
-<style></style>
+<style>
+.news-div {
+  overflow-x: hidden;
+  /* flex: 300px; */
+}
+.news-div img {
+  width: 100%;
+  height: auto;
+  color: rgb(81, 233, 43);
+}
+</style>
 
 <script>
 import axios from "axios";
@@ -49,6 +73,8 @@ export default {
       //linechart
       options: null,
       series: null,
+      searches: [],
+      searchbar: "",
       //candlechart
       // candleOptions: null,
       // candleSeries: null,
@@ -60,16 +86,19 @@ export default {
     // this.stock_news();
   },
   methods: {
-    apiStocks: function() {
-      axios.get("/api/stock_search?ticker=" + this.ticker).then(response => {
+    apiStocks: function(ticker) {
+      axios.get("/api/stock_search?ticker=" + ticker).then(response => {
         this.stock = response.data;
 
         console.log(response.data);
-
-        // console.log(new Date());
-
         console.log("Realtime stock", this.apiStocks);
-        this.stock_chart();
+        this.stock_chart(ticker);
+      });
+    },
+    searchBar: function() {
+      axios.get("/api/search_bar?searchbar=" + this.searchbar).then(response => {
+        this.searches = response.data;
+        console.log(this.searches);
       });
     },
     toggleFavorite: function() {
@@ -126,7 +155,7 @@ export default {
       });
     },
     stock_chart: function() {
-      axios.get("api/indicators?ticker=" + this.ticker).then(response => {
+      axios.get("api/stock_chart?ticker=" + this.ticker).then(response => {
         var data = response.data;
 
         console.log(data);
@@ -138,8 +167,8 @@ export default {
             categories: data.map(x => x.date),
           },
         };
-        console.log(this.options.xaxis.categories);
-        this.options.xaxis.categories.filter(current => current.select);
+        // console.log(this.options.xaxis.categories);
+        // this.options.xaxis.categories.filter(current => current.select);
         this.series = [
           {
             name: "open",

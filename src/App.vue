@@ -25,20 +25,25 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  /* background: rgb(22, 15, 41) !important; */
+  color: #3a86d3;
+  font-family: "Orbitron", sans-serif;
+  letter-spacing: 0.5px;  
 }
 
 #nav {
   padding: 30px;
+  color: #f0f4f8;
 }
 
 #nav a {
   font-weight: bold;
-  color: #7999b9;
+  color: #0dec88;
 }
 
 #nav a.router-link-exact-active {
   color: #0dec88;
+}
+#orbitron {
+  font-family: "Orbitron", sans-serif;
 }
 </style>
