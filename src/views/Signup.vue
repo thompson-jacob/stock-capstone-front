@@ -1,5 +1,5 @@
 <template>
-  <div class="signup">
+  <div class="signup mt-5">
     <form v-on:submit.prevent="submit()">
       <h1>Signup</h1>
       <ul>
@@ -27,7 +27,12 @@
     </form>
   </div>
 </template>
-
+<style>
+form {
+  width: 50%;
+  margin: auto;
+}
+</style>
 <script>
 import axios from "axios";
 
@@ -40,7 +45,6 @@ export default {
       password: "",
       passwordConfirmation: "",
       errors: [],
-      
     };
   },
   methods: {
@@ -60,7 +64,7 @@ export default {
         .catch(error => {
           this.errors = error.response.data.errors;
         });
-    }
+    },
   },
 };
 </script>

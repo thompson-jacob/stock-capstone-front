@@ -9,7 +9,7 @@ export default {
   created: function() {
     delete axios.defaults.headers.common["Authorization"];
     localStorage.removeItem("jwt");
-    this.$router.push("/dashboard");
+    this.$router.push("src/views/Stocks.vue");
   },
 };
 </script>
