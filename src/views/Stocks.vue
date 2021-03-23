@@ -1,52 +1,97 @@
 <template>
   <div class="#stocks">
-    <div>
-      <p>type to search a stock for its data</p>
-      <!-- <input type="search" v-model="ticker" placeholder="exact ticker" />
-      <button v-on:click="this.apiStocks">search</button>  -->
-    </div>
-    <div class="overflow-auto p-3 mb-3 mb-md-0 mr-md-3 bg-dark, favorites">
-      <h4>Watchlist</h4>
-      <div v-for="favorite in favorites" v-bind:key="favorite.id">
-        <p v-on:click="apiStocks((ticker = favorite.stock.ticker))">{{ favorite.stock.ticker }}</p>
-      </div>
-    </div>
-    <div>
-      <input type="search real" v-model="searchbar" placeholder="search " />
-      <!-- TODO refresh watchlist on change -->
-      <div v-for="search in searches" v-bind:key="search.symbol" v-on:click="apiStocks((ticker = search.symbol))">
-        <p class="search-return">
-          <span>{{ search.name }}</span>
-          <span class="stock-ticker-symbol">{{ search.symbol }}</span>
-        </p>
-      </div>
-    </div>
-    <button v-on:click="this.searchBar">search</button>
-    <h1>{{ stock }}</h1>
-    <input @change="toggleFavorite()" type="checkbox" id="checkbox" v-model="stock.favorited" />
-    <label for="checkbox">Favorited</label>
-    <aside class="overflow-auto p-3 mb-3 mb-md-0 mr-md-3 bg-dark" style="max-width: 300px; max-height: 200px;">
-      <h4>Stock News</h4>
-      <button v-on:click="this.stock_news">News</button>
-      <section class="news-div">
-        <div v-for="story in storys" v-bind:key="story.ticker">
-          <img v-bind:src="`${story.image}`" />
-          <p>News For {{ story.symbol }}</p>
-          <p>Published by {{ story.site }}</p>
-          <p>{{ story.publishedDate }}</p>
-          <p>{{ story.title }}</p>
-          <p>{{ story.text }}</p>
-
-          <a :href="`${story.url}`">Full Story Here</a>
+    <div class="row">
+      <div class="overflow-auto p-3 mb-3 mb-md-0 mr-md-3 bg-dark col-2">
+        <h4>Watchlist</h4>
+        <div v-for="favorite in favorites" v-bind:key="favorite.id">
+          <p v-on:click="apiStocks((ticker = favorite.stock.ticker))">{{ favorite.stock.ticker }}</p>
         </div>
-      </section>
-    </aside>
-    <!-- <button v-on:click="this.stock_chart">Charts</button> -->
-    <div v-if="options && series">
-      <apexchart width="500" type="line" :options="options" :series="series"></apexchart>
-    </div>
-    <div v-if="options2 && series2">
-      <apexchart type="candlestick" height="350" :options="options2" :series="series2"></apexchart>
+      </div>
+      <div class="col-7">
+        <div>
+          <p>type to search a stock for its data</p>
+          <!-- <input type="search" v-model="ticker" placeholder="exact ticker" />
+      <button v-on:click="this.apiStocks">search</button>  -->
+        </div>
+        <div>
+          <input type="search real" v-model="searchbar" placeholder="search " />
+          <!-- TODO refresh watchlist on change -->
+          <select
+            v-if="searches.length > 0"
+            v-model="selectedSearch"
+            v-on:change="apiStocks((ticker = selectedSearch.symbol))"
+          >
+            <option disabled value="">Please select one</option>
+            <option v-for="search in searches" v-bind:key="search.symbol" v-bind:value="search">
+              {{ search.name }}
+            </option>
+          </select>
+          <div v-for="search in searches" v-bind:key="search.symbol" v-on:click="apiStocks((ticker = search.symbol))">
+            <p class="search-return">
+              <span>{{ search.name }}</span>
+              <span class="stock-ticker-symbol">{{ search.symbol }}</span>
+            </p>
+          </div>
+        </div>
+        <button v-on:click="this.searchBar">search</button>
+        <div v-if="stock.companyName">
+          <h1>{{ stock.companyName }} / {{ stock.ticker }}</h1>
+          <img v-bind:src="`${stock.image}`" />
+          <p>Company Profile</p>
+          <p>Exchange: {{ stock.exchangeShortName }}</p>
+          <p>Sector: {{ stock.sector }}</p>
+          <p>Last Price: {{ stock.price }}</p>
+          <p>Average Daily Volume: {{ stock.volAvg }}</p>
+          <p>IPO Date: {{ stock.ipoDate }}</p>
+          <p>Country: {{ stock.country }}</p>
+          <p>{{ stock.description }}</p>
+        </div>
+        <input @change="toggleFavorite()" type="checkbox" id="checkbox" v-model="stock.favorited" />
+        <label for="checkbox">Favorited</label>
+        <div v-if="options && series">
+          <div>
+            <button value="1min" v-on:click="stock_chart(`1min`)">
+              1min
+            </button>
+            <button value="5min" v-on:click="stock_chart(`5min`)">
+              5min
+            </button>
+            <button value="15min" v-on:click="stock_chart(`15min`)">
+              15min
+            </button>
+            <button value="30min" v-on:click="stock_chart(`30min`)">
+              30min
+            </button>
+            <button value="1hour" v-on:click="stock_chart(`1hour`)">
+              1 hour
+            </button>
+            <button value="4hour" v-on:click="stock_chart(`4hour`)">
+              4 hr
+            </button>
+          </div>
+          <apexchart width="100%" type="line" :options="options" :series="series"></apexchart>
+        </div>
+        <div v-if="options2 && series2">
+          <apexchart type="candlestick" width="100%" :options="options2" :series="series2"></apexchart>
+        </div>
+      </div>
+      <aside class="overflow-auto p-3 mb-3 mb-md-0 mr-md-3 bg-dark col-12" style="max-width: 300px; max-height: 200px;">
+        <h4>Stock News</h4>
+        <button v-on:click="this.stock_news">News</button>
+        <section class="news-div">
+          <div v-for="story in storys" v-bind:key="story.ticker">
+            <img v-bind:src="`${story.image}`" />
+            <p>News For {{ story.symbol }}</p>
+            <p>Published by {{ story.site }}</p>
+            <p>{{ story.publishedDate }}</p>
+            <p>{{ story.title }}</p>
+            <p>{{ story.text }}</p>
+
+            <a :href="`${story.url}`">Full Story Here</a>
+          </div>
+        </section>
+      </aside>
+      <!-- <button v-on:click="this.stock_chart">Charts</button> -->
     </div>
   </div>
 </template>
@@ -58,7 +103,7 @@
 }
 .news-div img {
   width: 100%;
-  height: auto;
+  height: 400px;
   color: rgb(81, 233, 43);
 }
 .favorites {
@@ -68,6 +113,9 @@
 h4 {
   color: rgb(81, 233, 43);
 }
+/* .chart {
+  font-family: "Orbitron", sans-serif;
+} */
 </style>
 
 <script>
@@ -91,7 +139,7 @@ export default {
       //candlechart
       options2: null,
       series2: null,
-      chart_time: "5min",
+      selectedSearch: {},
     };
   },
   created: function() {
@@ -116,7 +164,7 @@ export default {
         console.log("Realtime stock", this.apiStocks);
         this.searches = [];
         // var chart = this.chart_time;
-        this.stock_chart();
+        this.stock_chart("30min");
       });
     },
     searchBar: function() {
@@ -177,18 +225,20 @@ export default {
         console.log(response.data);
       });
     },
-    stock_chart: function() {
-      axios.get("api/stock_chart?chart_time=" + this.chart_time + "&ticker=" + this.ticker).then(response => {
+    stock_chart: function(time) {
+      console.log("charttime:", time);
+      axios.get("api/stock_chart?chart_time=" + time + "&ticker=" + this.ticker).then(response => {
         var data = response.data;
 
         data = data.reverse();
+        console.log("data", data);
 
         this.options = {
           chart: {
             id: "vuechart-example",
           },
           xaxis: {
-            categories: data.map(x => x.date),
+            categories: data.slice(Math.max(data.length - data.length / 20, 0)).map(x => x.date),
           },
         };
         // console.log(this.options.xaxis.categories);
@@ -197,7 +247,7 @@ export default {
         this.series = [
           {
             name: "open",
-            data: data.map(y => y.open),
+            data: data.slice(Math.max(data.length - data.length / 20, 0)).map(y => y.open),
           },
           // {
           //   name: "high",
@@ -215,13 +265,13 @@ export default {
         this.options2 = {
           chart: {
             id: "candlestick-example",
-            type: "candle",
+            font: "orbitron, sanserif",
           },
         };
         this.series2 = [
           {
             data: data
-              .slice(Math.max(data.length - 5, 0))
+              .slice(Math.max(data.length - data.length / 20, 0))
               .map(item => ({ x: item.date, y: [item.open, item.high, item.low, item.close] })),
           },
         ];
