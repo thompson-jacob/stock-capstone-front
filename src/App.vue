@@ -1,19 +1,20 @@
 <template>
   <div id="app">
-    <div id="nav" class="navbar navbar-dark bg-dark font-light">
-      <router-link to="/">Home</router-link>
+    <div id="nav" class="navbar navbar-light bg-dark font-light">
+      <!-- <router-link class="nav-router-link" to="/">Home</router-link> -->
+      <!-- | -->
+      <!-- <router-link class="nav-router-link" to="/about">About</router-link>
+      | -->
+
+      <router-link class="nav-router-link" to="/stocks">Stocks</router-link>
       |
-      <router-link to="/about">About</router-link>
+      <router-link class="nav-router-link" to="/signup">Signup</router-link>
       |
-      <router-link to="/stocks">Stocks</router-link>
+      <router-link class="nav-router-link" to="/login">Login</router-link>
       |
-      <router-link to="/signup">Signup</router-link>
-      |
-      <router-link to="/login">Login</router-link>
-      |
-      <router-link to="/logout">Logout</router-link>
-      |
-      <router-link to="/linechart">LineChart</router-link>
+      <router-link class="nav-router-link" to="/logout">Logout</router-link>
+      <!-- |
+      <router-link class="nav-router-link" to="/linechart">LineChart</router-link> -->
     </div>
     <router-view />
   </div>
@@ -27,12 +28,21 @@
   text-align: center;
   color: #3a86d3;
   font-family: "Orbitron", sans-serif;
-  letter-spacing: 0.5px;  
+  letter-spacing: 0.5px;
 }
 
 #nav {
   padding: 30px;
   color: #f0f4f8;
+}
+
+.nav-router-link {
+  text-decoration: none;
+  transition-timing-function: 0.5s ease-in-out;
+}
+
+.nav-router-link:hover {
+  transform: scale(1.1);
 }
 
 #nav a {
@@ -45,5 +55,9 @@
 }
 #orbitron {
   font-family: "Orbitron", sans-serif;
+}
+
+#pointer {
+  cursor: pointer;
 }
 </style>
