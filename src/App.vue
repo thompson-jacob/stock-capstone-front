@@ -5,6 +5,7 @@
       <!-- | -->
       <!-- <router-link class="nav-router-link" to="/about">About</router-link>
       | -->
+      <h3 class="logo">DiamondHands</h3>
 
       <router-link class="nav-router-link" to="/stocks">Stocks</router-link>
       |
@@ -47,11 +48,13 @@
 
 #nav a {
   font-weight: bold;
-  color: #0dec88;
+  /* color: #0dec88; */
+  color: rgb(81, 233, 43);
 }
 
 #nav a.router-link-exact-active {
   color: #0dec88;
+  text-decoration-line: underline;
 }
 #orbitron {
   font-family: "Orbitron", sans-serif;
@@ -59,5 +62,8 @@
 
 #pointer {
   cursor: pointer;
+}
+#logo {
+  color: #666b69;
 }
 </style>

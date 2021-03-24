@@ -1,5 +1,6 @@
 <template>
-  <div class="#stocks">
+  <div>
+    <hr />
     <marquee-text
       @mouseenter="paused = !paused"
       @mouseleave="paused = !paused"
@@ -9,18 +10,20 @@
     >
       <span>Most Active Today</span>
       <span v-for="active in actives" v-bind:key="active.ticker">
-        <span @click="apiStocks((ticker = active.ticker))" class="badge badge-primary pointer">
+        <span @click="apiStocks((ticker = active.ticker))" class="badge badge-primary pointer nav-router-link">
           {{ active.ticker }}
         </span>
         <span>{{ active.changesPercentage }}</span>
       </span>
     </marquee-text>
+
     <marquee-text>
       <span :reverse="true" :duration="99" v-for="sector in sectors" v-bind:key="sector.sector">
         <span class="badge badge-primary">{{ sector.sector }}</span>
         <span>{{ sector.changesPercentage }}</span>
       </span>
     </marquee-text>
+    <hr />
     <!-- 3 column row under marquee -->
     <div class="row">
       <!-- scroll bar for news ticker -->
@@ -49,6 +52,8 @@
         </div>
         <div>
           <input type="search real" v-model="searchbar" placeholder="search " />
+          <button v-on:click="this.searchBar">search</button>
+
           <!-- TODO refresh watchlist on change -->
           <!-- <select
             v-if="searches.length > 0"
@@ -60,14 +65,16 @@
               {{ search.name }}
             </option>
           </select> -->
+
           <div v-for="search in searches" v-bind:key="search.symbol" v-on:click="apiStocks((ticker = search.symbol))">
             <p class="search-return">
               <span>{{ search.name }}</span>
               <span class="stock-ticker-symbol">{{ search.symbol }}</span>
             </p>
           </div>
+          <!-- <button v-on:click="this.searchBar">search</button> -->
         </div>
-        <button v-on:click="this.searchBar">search</button>
+
         <div v-if="stock.companyName">
           <input @change="toggleFavorite()" type="checkbox" id="checkbox" v-model="stock.favorited" />
           <label for="checkbox">Favorited</label>
