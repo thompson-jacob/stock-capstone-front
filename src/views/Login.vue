@@ -46,7 +46,7 @@ export default {
         })
         .catch(error => {
           console.log(error.response);
-          this.errors = ["Invalid email or password."];
+          this.errors = [error.response];
           this.email = "";
           this.password = "";
         });
