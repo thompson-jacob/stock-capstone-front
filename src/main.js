@@ -6,7 +6,7 @@ import axios from "axios";
 
 
 axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
-axios.defaults.baseURL = process.env.NODE_ENV === "development" ? "http://localhost:3000" : "/";
+axios.defaults.baseURL = process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://priceless-kare-0ae047.netlify.app/";
 
 var jwt = localStorage.getItem("jwt");
 if (jwt) {
