@@ -6,7 +6,7 @@ import axios from "axios";
 
 
 axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
-axios.defaults.baseURL = process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://priceless-kare-0ae047.netlify.app/";
+axios.defaults.baseURL = process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://floating-coast-42504.herokuapp.com/";
 
 var jwt = localStorage.getItem("jwt");
 if (jwt) {
