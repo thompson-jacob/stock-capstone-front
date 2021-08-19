@@ -1,18 +1,17 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-// import Home from "../views/Home.vue";
 import Stocks from "../views/Stocks.vue";
 import Signup from "../views/Signup.vue";
 import Login from "../views/Login.vue";
-
+import LineChart from "../components/LineChart.vue";
 Vue.use(VueRouter);
 
 const routes = [
-  // {
-  //   path: "/",
-  //   name: "Home",
-  //   component: Home,
-  // },
+  {
+    path: "/",
+    name: "Home",
+    component: Home,
+  },
   // {
   //   path: "/about",
   //   name: "About",
@@ -28,7 +27,7 @@ const routes = [
   },
   { path: "/signup", name: "signup", component: Signup },
   { path: "/login", name: "login", component: Login },
-  // { path: "/linechart", name: "linechart", component: Login },
+  { path: "/linechart", name: "linechart", component: LineChart },
 
 ];
 

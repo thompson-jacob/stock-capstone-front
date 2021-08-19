@@ -224,7 +224,7 @@ export default {
         this.searches = [];
         // var chart = this.chart_time;
         this.stock_news(ticker);
-        this.stock_chart("30min");
+        this.stock_chart("5min");
       });
     },
     mostActiveStocks: function() {
@@ -318,7 +318,7 @@ export default {
             id: "vuechart-example",
           },
           xaxis: {
-            categories: data.slice(Math.max(data.length - data.length / 20, 0)).map(x => x.date),
+            categories: data.slice(Math.max(data.length - data.length / 5, 0)).map(x => x.date),
           },
         };
         // console.log(this.options.xaxis.categories);
@@ -327,7 +327,7 @@ export default {
         this.series = [
           {
             name: "open",
-            data: data.slice(Math.max(data.length - data.length / 20, 0)).map(y => y.open),
+            data: data.slice(Math.max(data.length - data.length / 5, 0)).map(y => y.open),
           },
           // {
           //   name: "high",
