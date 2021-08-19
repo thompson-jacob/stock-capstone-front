@@ -6,7 +6,7 @@
       <!-- <router-link class="nav-router-link" to="/about">About</router-link>
       | -->
       <h3 class="logo">DiamondHands</h3>
-    <router-view>
+
       <router-link class="nav-router-link" to="/stocks">Stocks</router-link>
       |
       <router-link class="nav-router-link" to="/signup">Signup</router-link>
