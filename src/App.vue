@@ -14,10 +14,10 @@
       <router-link class="nav-router-link" to="/login">Login</router-link>
       |
       <router-link class="nav-router-link" to="/logout">Logout</router-link>
-      <!-- | -->
-      <!-- <router-link class="nav-router-link" to="/linechart">LineChart</router-link> -->
+      
     </div>
     <router-view />
+    
   </div>
 </template>
 
