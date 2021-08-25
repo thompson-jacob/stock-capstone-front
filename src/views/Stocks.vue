@@ -8,7 +8,7 @@
       :duration="70"
       class="stock-marquee"
     >
-      <span>Most Active Today</span>
+      <span> Most Active Today </span>
       <span v-for="active in actives" v-bind:key="active.ticker">
         <span @click="apiStocks((ticker = active.ticker))" class="badge badge-primary pointer nav-router-link">
           {{ active.ticker }}
@@ -51,6 +51,11 @@
       <button v-on:click="this.apiStocks">search</button>  -->
         </div>
         <div>
+          <!-- <span>
+            <select name="" id="">
+              <option :selected>Choose Market</option>
+            </select>
+          </span> -->
           <input type="search real" v-model="searchbar" placeholder="search " />
           <button v-on:click="this.searchBar">search</button>
 
@@ -198,6 +203,7 @@ export default {
       selectedSearch: {},
       sectors: {},
       paused: false,
+      // exchange: [NASDAQ, NYSE, CRYPTO, AMEX, ETF, MUTUAL_FUND, COMMODITY, INDEX, FOREX, TSX, EURONEXT, XETRA, NSE, LSE],
     };
   },
   created: function() {
@@ -236,8 +242,7 @@ export default {
       axios.get("api/sector_changes").then(response => {
         var data = response.data.sectorPerformance;
         var data1 = data.slice(1, 9);
-        // var data2 = data.slice(6,)
-        // var data2 = data.slice(Math.max(data.length - data.length / 2, 0))
+      
 
         this.sectors = data1;
         console.log("sectors", this.sectors);
