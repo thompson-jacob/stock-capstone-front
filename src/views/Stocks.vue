@@ -1,3 +1,8 @@
+<style>
+hr {
+  margin-top: 0;
+}
+</style>
 <template>
   <div>
     <hr />
@@ -8,7 +13,7 @@
       :duration="70"
       class="stock-marquee"
     >
-      <span> Most Active Today </span>
+      <span>Most Active Today</span>
       <span v-for="active in actives" v-bind:key="active.ticker">
         <span @click="apiStocks((ticker = active.ticker))" class="badge badge-primary pointer nav-router-link">
           {{ active.ticker }}
@@ -242,7 +247,6 @@ export default {
       axios.get("api/sector_changes").then(response => {
         var data = response.data.sectorPerformance;
         var data1 = data.slice(1, 9);
-      
 
         this.sectors = data1;
         console.log("sectors", this.sectors);
