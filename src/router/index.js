@@ -4,6 +4,8 @@ import Home from "../views/Home.vue"
 import Stocks from "../views/Stocks.vue";
 import Signup from "../views/Signup.vue";
 import Login from "../views/Login.vue";
+import Logout from "../views/Logout.vue";
+
 import LineChart from "../components/LineChart.vue";
 Vue.use(VueRouter);
 
@@ -29,7 +31,7 @@ const routes = [
   { path: "/signup", name: "signup", component: Signup },
   { path: "/login", name: "login", component: Login },
   { path: "/linechart", name: "linechart", component: LineChart },
-
+  { path: "/logout", name: "logout", component: Logout },
 ];
 
 const router = new VueRouter({

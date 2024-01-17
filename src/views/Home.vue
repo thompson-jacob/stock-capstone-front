@@ -1,10 +1,10 @@
 <template>
   <div>
     <h1>
-      Welcome to DiamondHands
+      Welcome to GenerateAlpha
       <hr />
     </h1>
-    <p>TradingVue is an application designed to keep track of your favorite stock prices and news</p>
+    <p>Generate Alpha is an application designed to keep track of your favorite stock prices and news</p>
     <p>
       The site is in an open beta right now, if you would like to play around please login using these credentials
       username: user@email.com password: password
