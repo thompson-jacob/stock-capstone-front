@@ -1,3 +1,4 @@
+<!-- eslint-disable no-console -->
 <template>
   <div>
     <hr />
@@ -224,8 +225,12 @@ export default {
   },
 
   methods: {
-    // change passed in?
     userFavorites: function() {
+      if (!this.sharedState.isAuthenticated) {
+        // User is not authenticated, so don't make the API call
+        console.log("User is not authenticated. Skipping API call.");
+        return;
+      }
       axios.get("/api/userstocks").then(response => {
         this.favorites = response.data;
         console.log(this.favorites);
@@ -265,38 +270,37 @@ export default {
       });
     },
     toggleFavorite: function() {
-        console.log(this.stock.favorited);
-        if (this.stock.favorited) {
-          console.log("Add Favorite");
-          var params = {
-            ticker: this.ticker,
-          };
-          axios
-            .post("/api/userstocks", params)
-            .then(response => {
-              console.log(response.data);
-              this.userFavorites();
-            })
-            .catch(error => {
-              this.errors = error.response.data.errors;
-            });
-        } else {
-          console.log("Delete Favorite");
-          // delete favorite here
-          params = {
-            stock_id: this.stock.id,
-          };
-          axios
-            .delete("/api/userstocks", { data: params })
-            .then(response => {
-              console.log(response.data);
-              this.userFavorites();
-            })
-            .catch(error => {
-              this.errors = error.response.data.errors;
-            });
-        }
-      
+      console.log(this.stock.favorited);
+      if (this.stock.favorited) {
+        console.log("Add Favorite");
+        var params = {
+          ticker: this.ticker,
+        };
+        axios
+          .post("/api/userstocks", params)
+          .then(response => {
+            console.log(response.data);
+            this.userFavorites();
+          })
+          .catch(error => {
+            this.errors = error.response.data.errors;
+          });
+      } else {
+        console.log("Delete Favorite");
+        // delete favorite here
+        params = {
+          stock_id: this.stock.id,
+        };
+        axios
+          .delete("/api/userstocks", { data: params })
+          .then(response => {
+            console.log(response.data);
+            this.userFavorites();
+          })
+          .catch(error => {
+            this.errors = error.response.data.errors;
+          });
+      }
     },
 
     addToFavorites: function() {
