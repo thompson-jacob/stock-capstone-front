@@ -5,21 +5,39 @@
       <!-- | -->
       <!-- <router-link class="nav-router-link" to="/about">About</router-link>
       | -->
-      <h3 class="logo">DiamondHands</h3>
+      <h3 class="logo">GenerateAlpha</h3>
 
       <router-link class="nav-router-link" to="/stocks">Stocks</router-link>
-      |
-      <router-link class="nav-router-link" to="/signup">Signup</router-link>
-      |
-      <router-link class="nav-router-link" to="/login">Login</router-link>
-      |
-      <router-link class="nav-router-link" to="/logout">Logout</router-link>
-      
+       <!-- TODO: Set same for signup -->
+      <router-link class="nav-router-link" v-if="!sharedState.isAuthenticated" to="/signup">Signup</router-link>
+      <router-link class="nav-router-link" v-if="sharedState.isAuthenticated" to="/logout">Logout</router-link>
+      <router-link class="nav-router-link" v-if="!sharedState.isAuthenticated" to="/login">Login</router-link>
     </div>
     <router-view />
-    
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      sharedState: {
+        isAuthenticated: false,
+      }
+    }
+  },
+  watch: {
+    $route: function() {
+      this.sharedState.isAuthenticated = !!localStorage.getItem("jwt");
+    }
+  },
+  created() {
+    this.sharedState.isAuthenticated = !!localStorage.getItem("jwt");
+    console.log('hello123')
+  },
+  // other methods, lifecycle hooks, etc.
+};
+</script>
 
 <style>
 #app {
