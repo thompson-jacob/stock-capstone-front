@@ -1,8 +1,3 @@
-<style>
-hr {
-  margin-top: 0;
-}
-</style>
 <template>
   <div>
     <hr />
@@ -86,8 +81,8 @@ hr {
         </div>
 
         <div v-if="stock.companyName">
-          <input @change="toggleFavorite()" type="checkbox" id="checkbox" v-model="stock.favorited" />
-          <label for="checkbox">Favorited</label>
+          <input v-if="sharedState.isAuthenticated" type="checkbox" id="checkbox" v-model="stock.favorited" />
+          <label v-if="sharedState.isAuthenticated" for="checkbox">Favorited</label>
           <h1>{{ stock.companyName }} / {{ stock.ticker }}</h1>
           <img class="mb-3" v-bind:src="`${stock.image}`" />
         </div>
@@ -138,6 +133,11 @@ hr {
       <!-- watchlist and technicals -->
       <div class="overflow-auto p-3 mb-3 mb-md-0 mr-md-3 ml-0 bg-dark col-3">
         <h4>Watchlist</h4>
+        <p>
+          <span v-if="!sharedState.isAuthenticated">
+            Please Sign up or Log In to add to favorites and create a Watchlist.
+          </span>
+        </p>
         <div v-for="favorite in favorites" v-bind:key="favorite.id">
           <p v-on:click="apiStocks((ticker = favorite.stock.ticker))" class="nav-router-link ">
             {{ favorite.stock.ticker }}
@@ -149,6 +149,10 @@ hr {
 </template>
 
 <style>
+hr {
+  margin-top: 0;
+}
+
 .nav-router-link {
   cursor: pointer;
 }
@@ -189,6 +193,7 @@ Vue.component(
 );
 Vue.component("marquee-text", MarqueeText);
 export default {
+  inject: ["sharedState"],
   data: function() {
     return {
       stock: "",
@@ -260,37 +265,38 @@ export default {
       });
     },
     toggleFavorite: function() {
-      console.log(this.stock.favorited);
-      if (this.stock.favorited) {
-        console.log("Add Favorite");
-        var params = {
-          ticker: this.ticker,
-        };
-        axios
-          .post("/api/userstocks", params)
-          .then(response => {
-            console.log(response.data);
-            this.userFavorites();
-          })
-          .catch(error => {
-            this.errors = error.response.data.errors;
-          });
-      } else {
-        console.log("Delete Favorite");
-        // delete favorite here
-        params = {
-          stock_id: this.stock.id,
-        };
-        axios
-          .delete("/api/userstocks", { data: params })
-          .then(response => {
-            console.log(response.data);
-            this.userFavorites();
-          })
-          .catch(error => {
-            this.errors = error.response.data.errors;
-          });
-      }
+        console.log(this.stock.favorited);
+        if (this.stock.favorited) {
+          console.log("Add Favorite");
+          var params = {
+            ticker: this.ticker,
+          };
+          axios
+            .post("/api/userstocks", params)
+            .then(response => {
+              console.log(response.data);
+              this.userFavorites();
+            })
+            .catch(error => {
+              this.errors = error.response.data.errors;
+            });
+        } else {
+          console.log("Delete Favorite");
+          // delete favorite here
+          params = {
+            stock_id: this.stock.id,
+          };
+          axios
+            .delete("/api/userstocks", { data: params })
+            .then(response => {
+              console.log(response.data);
+              this.userFavorites();
+            })
+            .catch(error => {
+              this.errors = error.response.data.errors;
+            });
+        }
+      
     },
 
     addToFavorites: function() {

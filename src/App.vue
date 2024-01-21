@@ -26,6 +26,11 @@ export default {
       }
     }
   },
+  provide() {
+    return {
+      sharedState: this.sharedState
+    };
+  },
   watch: {
     $route: function() {
       this.sharedState.isAuthenticated = !!localStorage.getItem("jwt");
