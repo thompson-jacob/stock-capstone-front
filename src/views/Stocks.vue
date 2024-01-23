@@ -234,6 +234,7 @@ export default {
       axios.get("/api/userstocks").then(response => {
         this.favorites = response.data;
         console.log(this.favorites);
+        
       });
     },
     apiStocks: function(ticker) {
