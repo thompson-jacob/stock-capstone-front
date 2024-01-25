@@ -82,7 +82,13 @@
         </div>
 
         <div v-if="stock.companyName">
-          <input v-if="sharedState.isAuthenticated" type="checkbox" id="checkbox" v-model="stock.favorited" />
+          <input
+            @change="toggleFavorite()"
+            v-if="sharedState.isAuthenticated"
+            type="checkbox"
+            id="checkbox"
+            v-model="stock.favorited"
+          />
           <label v-if="sharedState.isAuthenticated" for="checkbox">Favorited</label>
           <h1>{{ stock.companyName }} / {{ stock.ticker }}</h1>
           <img class="mb-3" v-bind:src="`${stock.image}`" />
@@ -234,7 +240,6 @@ export default {
       axios.get("/api/userstocks").then(response => {
         this.favorites = response.data;
         console.log(this.favorites);
-        
       });
     },
     apiStocks: function(ticker) {
